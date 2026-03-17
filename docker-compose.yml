@@ -1,0 +1,32 @@
+services:
+  pytes:
+    image: pytes-service
+    container_name: pytes-service
+    restart: unless-stopped
+    security_opt:
+      - seccomp=unconfined
+    ports:
+      - "8080:8080"
+    environment:
+      SERIAL_PORT: /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A6019ODM-if00-port0
+      SERIAL_BAUD: "115200"
+      POLL_INTERVAL_S: "30"
+      SERIAL_TIMEOUT_S: "4"
+      MAX_MODULES: "16"
+      BAT_RETRIES: "2"
+    devices:
+      - /dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A6019ODM-if00-port0:/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A6019ODM-if00-port0
+
+  telegraf:
+    image: telegraf:1
+    container_name: pytes-telegraf
+    restart: unless-stopped
+    depends_on:
+      - pytes
+    environment:
+      INFLUX_URL: ${INFLUX_URL}
+      INFLUX_TOKEN: ${INFLUX_TOKEN}
+      INFLUX_ORG: ${INFLUX_ORG}
+      INFLUX_BUCKET: ${INFLUX_BUCKET}
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
