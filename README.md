@@ -1,4 +1,4 @@
-# pytes-proxy
+Pytes Betteries Proxy - generate a JSON with cell infos good for telegraf/influxdb or other ingestion
 
 A small Docker-friendly HTTP bridge for **Pytes E-BOX and v5** batteries that reads the battery console over **RS232 serial**, runs the `pwr` and `bat N` CLI commands, and exposes the result as compact **JSON** for Telegraf, InfluxDB v2, Grafana, or any other consumer.
 
